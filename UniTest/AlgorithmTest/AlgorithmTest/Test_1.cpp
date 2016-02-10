@@ -1,0 +1,6 @@
+#include "Common.h"
+
+TEST(QUARDTREE_REVERSE, EXECUTE_BROWSER)
+{
+	ASSERT_TRUE(true);
+}
