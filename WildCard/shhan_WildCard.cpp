@@ -12,6 +12,8 @@ class CWildCard{
 
 	bool equal;
 
+	bool a_flag, t_flag, f_flag;
+
 	void compare_str();
 	bool compare_char(char, char, int);
 
@@ -30,7 +32,7 @@ CWildCard::CWildCard(){
 
 CWildCard::CWildCard(string str1, string str2){
 
-//	CWildCard();
+	//	CWildCard();
 
 	wild_card_str = str1;
 	given_str = str2;
@@ -39,7 +41,8 @@ CWildCard::CWildCard(string str1, string str2){
 	gv_char_index = 0;
 
 	equal = false;
-	
+	a_flag = false, t_flag = false, f_flag = false;
+
 	compare_str();
 }
 
@@ -48,7 +51,7 @@ void CWildCard::compare_str(){
 	int gap = given_str.length() - wild_card_str.length();
 	bool result = compare_char(wild_card_str.at(wc_char_index), given_str.at(gv_char_index), gap);
 
-	if (result) {
+	if (result && !f_flag) {
 
 		printf("identical! \n");
 	}
@@ -62,17 +65,23 @@ bool CWildCard::compare_char(char wild_card_char, char given_char, int gap){
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	if (gap > 0){
-		
+
 		if (wild_card_char == '*' || wild_card_char == '?' || wild_card_char == given_char){
 
+			if (wild_card_char == '*')	a_flag = true;
+			if (a_flag == true && wild_card_char == given_char) t_flag = true;
+			
 			equal = true;
 			wc_char_index++;
 			gv_char_index++;
 			if ((gv_char_index >= given_str.length()) || (wc_char_index >= wild_card_str.length())){ return equal; }
 			compare_char(wild_card_str.at(wc_char_index), given_str.at(gv_char_index), gap);
-		
-		}else {
-		
+
+		}
+		else {
+			
+			if (a_flag == true && t_flag == true) f_flag = true;
+
 			equal = false;
 			gv_char_index++;
 			if ((gv_char_index >= given_str.length()) || (wc_char_index >= wild_card_str.length())){ return equal; }
@@ -87,15 +96,16 @@ bool CWildCard::compare_char(char wild_card_char, char given_char, int gap){
 			equal = true;
 			wc_char_index++; gv_char_index++;
 			compare_char(wild_card_str.at(wc_char_index), given_str.at(gv_char_index), gap);
-		
-		}else {
+
+		}
+		else {
 
 			equal = false;
 			wc_char_index++; gv_char_index++;
 			compare_char(wild_card_str.at(wc_char_index), given_str.at(gv_char_index), gap);
 		}
 	}
-	
+
 }
 
 void main(){
@@ -106,11 +116,12 @@ void main(){
 	string wild_card4 = "*lp";
 	string wild_card5 = "*la";
 	string wild_card6 = "abc*de?fg?h*cd";
+	string wild_card7 = "abc*de?fg?h*dd";
 	string given_str1 = "help";
 	string given_str2 = "heap";
 	string given_str3 = "abceedexfghhhhhcd";
-
-	CWildCard wc(wild_card4, given_str1);
+	
+	CWildCard wc(wild_card7, given_str3);
 
 }
 
